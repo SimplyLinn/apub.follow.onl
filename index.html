@@ -90,7 +90,7 @@
               throw new Error("Invalid mastodon user");
             }
             localStorage.setItem("followTemplate", subscribeTemplate);
-            window.location.href = subscribeTemplate.replace("{uri}", `${encodeURIComponent(targetUrl.href)}`);
+            window.location.href = subscribeTemplate.replace("{uri}", `${encodeURIComponent(targetAcct)}`);
           } catch (err) {
             console.error(err);
             renderError(err);
@@ -152,7 +152,7 @@
         if (!followTemplate) {
           renderForm(canonicalUsername, profileUrl);
         } else {
-          window.location.href = followTemplate.replace("{uri}", `${encodeURIComponent(profileUrl.href)}`);
+          window.location.href = followTemplate.replace("{uri}", `${encodeURIComponent(acct)}`);
         }
       })().catch((err) => {
         console.error(err);

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My Website</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <script>
+      const WEBFINGER_PATHNAME = "/.well-known/webfinger";
+
+      function renderError(err) {
+        const errorEl = document.getElementById("error-container");
+        const details = document.createElement("p");
+        details.textContent =
+          typeof err === "string"
+            ? err
+            : err instanceof Error
+            ? err.stack
+            : JSON.stringify(err, undefined, 2);
+        details.style.whiteSpace = "pre-wrap";
+        details.style.fontFamily = "monospace";
+        errorEl.replaceChildren(
+          document.createTextNode(
+            "An error occurred."
+          ),
+          details
+        );
+      }
+
+      function renderForm(targetAcct, targetUrl) {
+        const title = document.createElement("h1");
+        title.textContent = `Follow ${canonicalUsername}`;
+
+        // The link to the user you're trying to follow
+        const targetLink = document.createElement("a");
+        targetLink.href = targetUrl.href;
+        targetLink.textContent = targetAcct;
+
+        // The link to the about page for this service
+        const aboutLink = document.createElement("a");
+        aboutLink.href = "//mstdn.follow.onl/about";
+        aboutLink.textContent = "mstdn.follow.onl";
+
+        // The paragraph explaining what this page is for
+        const paragraph = document.createElement("p");
+        paragraph.replaceChildren(
+          document.createTextNode(
+            "Welcome! It looks like you haven't configured your own user. Type in your own username below if you want to be able to instantly follow people using "
+          ),
+          aboutLink,
+          document.createTextNode(" in the future, or you can visit "),
+          targetLink,
+          document.createTextNode(" to view their profile on their instance.")
+        );
+
+        // The form for configuring your own username
+        const form = document.createElement("form");
+        form.method="POST";
+        form.innerHTML = `<label for="self-user">Your mastodon username</label><input id="self-üser" type="text" placeholder="username@instance" name="acct" /><input type="submit" value="Configure Username" />`;
+        const main = document.getElementById("main");
+
+        let submitting = false;
+
+        // Handle the form submission
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          if (submitting) return;
+          try {
+            submitting = true;
+            const acct = form.elements.acct.value.replace(/^(?:acct:)?@?/, "");
+            if (!acct) {
+              throw new Error("Invalid mastodon user");
+            }
+            const [, ...hostParts] = acct.split("@");
+            const hostname = hostParts.join("@");
+            const url = new URL(
+              `https://${hostname}${WEBFINGER_PATHNAME}?resource=acct:${encodeURIComponent(
+                acct
+              )}`
+            );
+
+            // Fetch the webfinger of the target user.
+            const res = await fetch(url);
+            const webfinger = await res.json();
+            const subscribeTemplate = webfinger.links.find(
+              ({ rel }) => rel === "http://ostatus.org/schema/1.0/subscribe"
+            ).template;
+            if (typeof subscribeTemplate !== "string") {
+              throw new Error("Invalid mastodon user");
+            }
+            localStorage.setItem("followTemplate", subscribeTemplate);
+            window.location.href = subscribeTemplate.replace("{uri}", `${encodeURIComponent(targetUrl.href)}`);
+          } catch (err) {
+            console.error(err);
+            renderError(err);
+          } finally {
+            submitting = false;
+          }
+        });
+
+        // Mount the page
+        main.replaceChildren(title, paragraph, form);
+      }
+
+      (async () => {
+        const acct = window.location.hash.replace(/^#(?:acct:)?@?/, "");
+        const [, ...hostParts] = acct.split("@");
+        const hostname = hostParts.join("@");
+        const url = new URL(
+          `https://${hostname}${WEBFINGER_PATHNAME}?resource=acct:${encodeURIComponent(
+            acct
+          )}`
+        );
+
+        // Ensure we haven't gotten a bad hostname
+        if (url.hostname !== hostname || url.pathname !== WEBFINGER_PATHNAME) {
+          throw new Error("Invalid mastodon user");
+        }
+
+        // Fetch the webfinger of the target user.
+        const res = await fetch(url);
+        const webfinger = await res.json();
+        const subject = new URL(webfinger.subject);
+
+        // Ensure the subject is an acct: URL
+        if (subject.protocol !== "acct:") {
+          throw new Error("Invalid mastodon user");
+        }
+
+        // Get the profile link of the user we're trying to follow
+        const profileHref = webfinger.links.find(
+          ({ rel }) => rel === "http://webfinger.net/rel/profile-page"
+        ).href;
+
+        // Ensure we got a valid profile link
+        if (typeof profileHref !== "string") {
+          throw new Error("Invalid mastodon user");
+        }
+
+        // Parse the URL to sanity check it
+        const profileUrl = new URL(profileHref);
+
+        // Make sue the protocol is http or https
+        // This is to prevent javascript: URLs
+        if (!/^https?:$/.test(profileUrl.protocol)) {
+          throw new Error("Invalid mastodon user");
+        }
+
+        canonicalUsername = subject.pathname;
+        const followTemplate = localStorage.getItem("followTemplate");
+        if (!followTemplate) {
+          renderForm(canonicalUsername, profileUrl);
+        } else {
+          window.location.href = followTemplate.replace("{uri}", `${encodeURIComponent(profileUrl.href)}`);
+        }
+      })().catch((err) => {
+        console.error(err);
+        renderError(err);
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="error-container"></div>
+    <main id="main">
+      <h1>Loading...</h1>
+    </main>
+    <footer>
+      This is a test and not ready for production use. Please do not link to this on your website just yet.
+    </footer>
+  </body>
+</html>

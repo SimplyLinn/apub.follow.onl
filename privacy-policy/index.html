@@ -1,6 +1,3 @@
-<!--
-try{window.open('https://example.com','_blank','noopener,noreferrer');return false}catch{return true}
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,10 +5,9 @@ try{window.open('https://example.com','_blank','noopener,noreferrer');return fal
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Follow.onl</title>
+  <title>Privacy Policy | Follow.onl</title>
   <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="icon" type="image/svg+xml" href="/icon.svg">
-  <link rel="icon" type="image/png" href="/icon-64x64.png"/>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link href="/normalize.css" rel="stylesheet" />
   <link href="/main.css" rel="stylesheet" />
 </head>
@@ -30,36 +26,30 @@ try{window.open('https://example.com','_blank','noopener,noreferrer');return fal
   </header>
   <div id="error-container"></div>
   <main id="main">
-    <h1>Welcome</h1>
+    <h1>Privacy Policy</h1>
     <div class="card">
-      <h2>What is this?</h2>
+      <h2>Data collected</h2>
       <p>
-        This service is meant to make it easier to follow people on
-        ActivityPub instances through links online. This service allows
-        users to have their local instance signup page a click away.
+        I do not collect any data. Everything is under the control of the user's browser.
       </p>
     </div>
     <div class="card">
-      <h2>Make your own universal follow link</h2>
+      <h2>Data stored on the user's browser</h2>
       <p>
-        Toa construct your own universal follow link, just use this format:<br>
-        <code>https://follow.onl/apub/#{user@instance}</code>
+        A small string outlining where to redirect the user for following on their own instance to is stored on the browser
+        the purpose of which is to simplify the process of following a user on recurring visits.
+        This data is never sent to any server at any point.
       </p>
       <p>
-        For instance, I would use<br>
-        <code>https://follow.onl/apub/#me@linn.lgbt</code><br>
-        which becomes: <a href="https://follow.onl/apub/#me@linn.lgbt">This link</a>
+        While technically possible, a future update could prompt the users browser to send this data to a server, but this
+        is not planned, and I vow to make any such future change opt-in, should it happen at all.
       </p>
     </div>
     <div class="card">
-      <h2>Do I need to authorize or anything?</h2>
+      <h2>What about analytics/metrics?</h2>
       <p>
-        No. This service does not require any authorization. It does not even require you to be logged in to your
-        instance. It's just a
-        simple redirect to your instance's follow page. The only thing you need to do is to make sure that you have a
-        valid username on your
-        instance. It doesn't even have to be your own username, since the follow-endpoint is not tied to any specific
-        user.
+        Due to the simple nature of this service, we do not collect any analytics or metrics. We do not even have a
+        server to collect any data on.
       </p>
     </div>
   </main>

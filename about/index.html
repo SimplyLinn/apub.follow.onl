@@ -1,6 +1,3 @@
-<!--
-try{window.open('https://example.com','_blank','noopener,noreferrer');return false}catch{return true}
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,10 +5,9 @@ try{window.open('https://example.com','_blank','noopener,noreferrer');return fal
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Follow.onl</title>
+  <title>About | Follow.onl</title>
   <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="icon" type="image/svg+xml" href="/icon.svg">
-  <link rel="icon" type="image/png" href="/icon-64x64.png"/>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link href="/normalize.css" rel="stylesheet" />
   <link href="/main.css" rel="stylesheet" />
 </head>
@@ -30,9 +26,9 @@ try{window.open('https://example.com','_blank','noopener,noreferrer');return fal
   </header>
   <div id="error-container"></div>
   <main id="main">
-    <h1>Welcome</h1>
+    <h1>About</h1>
     <div class="card">
-      <h2>What is this?</h2>
+      <h2>Purpose</h2>
       <p>
         This service is meant to make it easier to follow people on
         ActivityPub instances through links online. This service allows
@@ -40,15 +36,61 @@ try{window.open('https://example.com','_blank','noopener,noreferrer');return fal
       </p>
     </div>
     <div class="card">
-      <h2>Make your own universal follow link</h2>
+      <h2>How it works</h2>
       <p>
-        Toa construct your own universal follow link, just use this format:<br>
-        <code>https://follow.onl/apub/#{user@instance}</code>
+        ActivityPub instances uses something called <a href="https://webfinger.net/" rel="noopener noreferrer"
+          target="_blank">webfinger</a> to
+        find out information about a user, and the instance it's on. This service uses the webfinger protocol to resolve
+        the target user's
+        instance, if allowed by CORS, and gets the profile page and canonical account name from the webfinger response.
       </p>
       <p>
-        For instance, I would use<br>
-        <code>https://follow.onl/apub/#me@linn.lgbt</code><br>
-        which becomes: <a href="https://follow.onl/apub/#me@linn.lgbt">This link</a>
+        If a canonical lookup of the webfinger endpoint is not possible (due to CORS), the service will attempt to infer
+        a valid profile path from the
+        provided account name itself. This is not guaranteed to work, but it's good enough as a fallback. The remote
+        follow system will most likely still
+        operate as normal.
+      </p>
+      <p>
+        The first time someone gets linked to this service, they get asked to submit their own username. This service
+        will in turn use
+        webfinger to find out their follow link, and store it in the browsers local storage. This way, the next time
+        someone clicks on
+        a link to this service, they will be able to follow the target user instantly.
+      </p>
+    </div>
+    <div class="card">
+      <h2>What about privacy?</h2>
+      <p>
+        While this service DOES store the template path in the browser's local storage, it does not store any
+        information about the
+        target user. The path stored generally looks like this
+        <code>https://instance.url/authorize_interaction?uri={uri}</code> and
+        is used to redirect the user to their local instance's follow page.
+      </p>
+      <p>
+        This service is hosted on GitHub Pages, and is completely static. No data is collected by me, and since I've
+        opted to use url-hashes
+        for the user links, not even the username is sent to the server. So GitHub cannot see who being followed using
+        this service,
+        nor the username of who is following.
+      </p>
+      <p>
+        Since the follow-template is stored in local storage, that also never leaves the user's browser. Although,
+        browser will run
+        any JavaScript on the page, so while you can make sure that it does what I claim today, it could potentially
+        leak your follow template
+        in the future. But since your username is not sent to the server, at most what could be leaked with the current
+        source code is which instance
+        you're on.
+      </p>
+      <p>
+        I know internet privacy is a big deal for many, and I've tried to make the follow page where potentially
+        sensitive information is managed
+        as transparent as possible. No javascript framework or minified code. Not even external javascript resources.
+        It's all in the HTML in a script tag.
+        Commented and raw, in an effort to make it as trivial as possible to vet and audit the code that is actually
+        executed.
       </p>
     </div>
     <div class="card">

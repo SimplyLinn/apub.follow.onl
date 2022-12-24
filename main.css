@@ -1,0 +1,161 @@
+a {
+  color: #8c8dff;
+  text-decoration: none;
+  unicode-bidi: isolate;
+
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.error-wrapper, noscript {
+  flex: 0;
+}
+
+#error-container, noscript > .content {
+  background-color: #b94242;
+}
+#error-container:empty {
+  display: none;
+}
+#error-container p:last-child {
+  margin-bottom: 0;
+}
+#error-container p:first-child {
+  margin-top: 0;
+}
+#error-container code {
+  white-space: pre-wrap;
+}
+
+.page-title {
+  margin-left: 1rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+main {
+  flex-grow: 1;
+  flex-shrink: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+main > h1:first-child,
+main > h2:first-child,
+main > h3:first-child,
+main > h4:first-child,
+main > h5:first-child,
+main > h6:first-child {
+  margin-top: 0;
+}
+
+.card, #error-container, noscript > .content {
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.button-wrapper > * {	
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .card, #error-container, noscript > .content {
+    border-radius: 0;
+  }
+}
+
+a.home {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.card {
+  background-color: #444b5d;
+}
+.card > h1:first-child,
+.card > h2:first-child,
+.card > h3:first-child,
+.card > h4:first-child,
+.card > h5:first-child,
+.card > h6:first-child {
+  margin-top: 0;
+}
+
+footer,
+header {
+  flex: 0;
+  background-color: #282c37;
+  padding: 1rem 2rem;
+}
+header {
+  border-bottom: 1px solid #393f4f;
+}
+footer {
+  border-top: 1px solid #393f4f;
+}
+
+.header-content,
+.footer-content,
+main,
+.error-wrapper,
+noscript {
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+html {
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #191b22;
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+}
+button,
+.button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  background-color: #595aff;
+  border: 0;
+  border-radius: 4px;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled,
+input[type="button"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #eff3f5;
+    color: #000000;
+  }
+}

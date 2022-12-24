@@ -153,9 +153,11 @@ input[type="button"]:disabled {
   cursor: not-allowed;
 }
 
+/*
 @media (prefers-color-scheme: light) {
   body {
     background-color: #eff3f5;
     color: #000000;
   }
 }
+*/
